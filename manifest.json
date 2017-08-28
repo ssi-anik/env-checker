@@ -1,0 +1,17 @@
+{
+    "name": "Env Checker",
+    "description": "Env checker shows you the difference between two .env files from source to destination.",
+    "manifest_version": 2,
+    "version": "1.0",
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "browser_action": {
+        "default_icon": "icons/icon128.png",
+        "default_title": "Env checker",
+        "default_popup": "index.html"
+    }
+}
