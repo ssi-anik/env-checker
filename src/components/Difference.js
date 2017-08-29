@@ -9,7 +9,7 @@ class Difference extends Component {
         if ( this.props.difference.length ) {
             return (
                 <div style = {{ marginTop: "5px" }}>
-                    <h4>Difference from {this.props.caption} - {this.props.difference.length} items</h4>
+                    <h4>Difference from {this.props.caption} - {this.props.difference.length} {this.props.difference.length > 1 ? "items" : "item"}</h4>
                     {/* ADDED AN EXTRA = AFTER THE JOIN, OTHERWISE, AN EQUAL SIGN WILL BE MISSING */}
                     <pre>{ this.props.difference.join('=\n') + "="}</pre>
                 </div>
