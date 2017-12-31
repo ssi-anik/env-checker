@@ -5,7 +5,7 @@
     "main": "src/bootstrap.js",
     "scripts": {
         "start": "npm run build",
-        "build": "webpack -d && cp src/index.html dist/index.html && cp -a src/styles dist && webpack-dev-server --content-base src/  --inline --hot --progress --color --host=0.0.0.0",
+        "build": "webpack -d && cp ./src/index.html ./dist/ && cp -a src/styles dist && webpack-dev-server --content-base src/  --inline --hot --progress --color --host=0.0.0.0",
         "build:dev": "node run build",
         "build:chrome": "NODE_ENV=chrome && mkdir -p extension && cp -a manifest.json extension &&  cp -a background.js extension && cp -a src/index.html extension && cp -a icons extension && cp -a src/styles extension && webpack -p"
     },
