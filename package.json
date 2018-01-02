@@ -1,6 +1,6 @@
 {
     "name": "env-checker",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "description": "Env checker shows you the difference between two .env files from source to destination.",
     "main": "src/bootstrap.js",
     "scripts": {
