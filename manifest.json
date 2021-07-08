@@ -2,7 +2,7 @@
     "name": "Env Checker",
     "description": "Env checker shows you the difference between two .env files from source to destination.",
     "manifest_version": 2,
-    "version": "1.0.2",
+    "version": "1.0.3",
     "background": {
         "scripts":[ "background.js"]
     },
