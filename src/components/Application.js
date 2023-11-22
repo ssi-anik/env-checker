@@ -1,37 +1,36 @@
 import React, { Component } from "react";
-import Difference from './Difference';
+import DiffComponent from './DiffComponent';
 
 class Application extends Component {
     constructor () {
         super();
-        this.difference = {
-            source: [],
-            destination: []
-        };
         this.state = {
             sourceToDestination: [],
             destinationToSource: []
         }
+
+        this._showDifference = this._showDifference.bind(this)
     }
 
     render () {
         return (
             <div className = "container-fluid">
                 <div className = "row">
-                    <div className = "col-sm-6">
-                        <h4 className = 'alert alert-info text-center'>Source (E.g: Development/.env.example)</h4>
-                        <textarea rows = '10' className = 'form-control' ref = 'source'></textarea>
-                        <Difference caption='Destination' difference={this.state.destinationToSource}/>
-                    </div>
-                    <div className = "col-sm-6">
-                        <h4 className = 'alert alert-info text-center'>Destination (E.g; Production/.env)</h4>
-                        <textarea rows = '10' className = 'form-control' ref = 'destination'></textarea>
-                        {<Difference caption='Source' difference={this.state.sourceToDestination}/>}
-                    </div>
+                    <DiffComponent
+                        label="Source (E.g: Development/.env.example)"
+                        ref="source"
+                        diff_caption="Destination"
+                        difference={this.state.destinationToSource} />
+
+                    <DiffComponent
+                        label="Destination (E.g; Production/.env)"
+                        ref="destination"
+                        diff_caption="Source"
+                        difference={this.state.sourceToDestination} />
                 </div>
                 <div className = "row">
                     <div className = "col-md-12" style = {{ marginTop: "5px" }}>
-                        <button type = 'button' className = 'btn btn-sm btn-info form-control' onClick = {this.showDifference.bind(this)}>
+                        <button type = 'button' className = 'btn btn-sm btn-info form-control' onClick = {this._showDifference}>
                             Show Difference
                         </button>
                     </div>
@@ -40,43 +39,33 @@ class Application extends Component {
         );
     }
 
-    showDifference () {
-        let source = this.refs.source.value.trim(),
-            destination = this.refs.destination.value.trim();
-        if ( "" != source ) {
-            // source has values
-            this.difference.source = this.extractKeyValuePair(source);
-        }
-        if ( "" != destination ) {
-            // destination has values
-            this.difference.destination = this.extractKeyValuePair(destination);
-        }
-        let sourceToDestination = this.difference.source.filter(x => this.difference.destination.indexOf(x) == -1);
-        let destinationToSource = this.difference.destination.filter(x => this.difference.source.indexOf(x) == -1);
+    _showDifference () {
+        const sourceMap = this._extractKeyValuePair(this.refs.source.getInputValue()),
+            destinationMap = this._extractKeyValuePair(this.refs.destination.getInputValue());;
+
+        const sourceToDestination = sourceMap.filter(x => destinationMap.indexOf(x) === -1);
+        const destinationToSource = destinationMap.filter(x => sourceMap.indexOf(x) === -1);
+
         this.setState({
             sourceToDestination,
             destinationToSource
         });
     }
 
-    extractKeyValuePair (text) {
+    _extractKeyValuePair (text) {
         let lines = text.split('\n');
-        let outcome = [];
-        for ( let index in lines ) {
-            let line = lines[index];
-            if ( !this.isComment(line) && !this.isEmptyLine(line) ) {
-                let key = this.splitLineToKeyValuePair(line);
-                if ( false == key ) {
-                    continue;
-                }
-                outcome.push(key);
-            }
-        }
-        return outcome;
+
+        return lines.map((elem) => {
+                        elem = elem.trim();
+
+                        if(this._isComment(elem)) return '';
+
+                        return this._splitLineToKeyValuePair(elem) || '';
+                    }).filter((elem) => !this._isEmptyElement(elem))
     }
 
-    splitLineToKeyValuePair (text) {
-        let splits = text.split(/=(.*)/);
+    _splitLineToKeyValuePair (text) {
+        const splits = text.split(/=(.*)/);
         if ( splits.length >= 2 && splits[0] != '' ) {
             // key = 0, value = 1
             return splits[0];
@@ -84,11 +73,11 @@ class Application extends Component {
         return false;
     }
 
-    isEmptyLine (text) {
-        return text.trim().length == 0;
+    _isEmptyElement (text) {
+        return text.trim().length === 0;
     }
 
-    isComment (text) {
+    _isComment (text) {
         return text.startsWith('#');
     }
 }
